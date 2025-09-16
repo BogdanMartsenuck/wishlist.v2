@@ -43,6 +43,7 @@ app.post("/api/gifts/:id/toggle", async (req, res) => {
     const newStatus = gift.taken ? 0 : 1;
     await db.run("UPDATE wishlist SET taken = ? WHERE id = ?", [newStatus, id]);
     res.json({ success: true, is_taken: newStatus });
+    console.log(`Gift ID ${id} taken status toggled to ${newStatus}`);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
