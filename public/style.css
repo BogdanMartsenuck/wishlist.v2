@@ -1,0 +1,147 @@
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Page Titles */
+  h1, h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  /* Grid for gift cards */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.8rem;
+  }
+  
+  /* Card */
+.card {
+    background: linear-gradient(135deg, #d0f7f4, #f0d9ff); /* pastel gradient */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  
+  /* Image on top */
+  .card img {
+    width: 100%;
+    height: 160px;
+    object-fit: scale-down;
+    border-bottom: 1px solid #eee;
+  }
+  
+  /* Card body (text below image) */
+  .card-body {
+    padding: 0.8rem 1rem;
+  }
+  
+  /* Title */
+  .card-body h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #222;
+  }
+  
+  /* Description */
+  .card-body p {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0.3rem 0 0.5rem 0;
+  }
+  
+  /* Links */
+  .card-body .links a {
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .card-body .links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Actions / checkbox */
+  .actions {
+    margin-top: 0.5rem;
+  }
+  
+  .actions label {
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  
+  .actions input[type="checkbox"] {
+    margin-right: 0.3rem;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+  
+  /* Admin buttons inside card */
+  .card-body button {
+    margin-top: 0.3rem;
+    margin-right: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .card-body button:hover {
+    opacity: 0.85;
+  }
+  
+  .card-body button:nth-of-type(1) {
+    background: #dc3545; /* Delete */
+    color: #fff;
+  }
+  
+  .card-body button:nth-of-type(2) {
+    background: #ffc107; /* Edit */
+    color: #222;
+  }
+  
+  /* Add gift form */
+  form#add-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  form#add-form input {
+    flex: 1 1 200px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  form#add-form button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background: #28a745;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  form#add-form button:hover {
+    background: #218838;
+  }

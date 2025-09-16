@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Wishlist</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>🛠 Admin — Управление подарками</h1>
+
+    <!-- Add gift form -->
+    <form id="add-form">
+      <input type="text" id="title" placeholder="Название подарка" required/>
+      <input type="text" id="image_url" placeholder="URL картинки (необязательно)"/>
+      <input type="text" id="links" placeholder="Ссылки через запятую"/>
+      <input type="text" id="description" placeholder="Описание (необязательно)"/>
+      <button type="submit">Добавить подарок</button>
+    </form>
+
+    <h2>Существующие подарки</h2>
+    <div id="gift-list" class="grid"></div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
