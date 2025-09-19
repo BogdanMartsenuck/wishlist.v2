@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/gifts", async (req, res) => {
     try {
       const gifts = await db.query(`
-        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist
+        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist ORDER BY id
       `);
       res.json(gifts.rows);
     } catch (err) {
