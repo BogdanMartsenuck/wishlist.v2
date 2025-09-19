@@ -1,10 +1,17 @@
 import express from "express";
-import sqlite3 from "sqlite3";
-import { open } from "sqlite";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import { Pool } from 'pg';
 
+const db = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    },
+    max: 10, // Максимальное количество клиентов в пуле,
+    idleTimeoutMillis: 30000, // Время ожидания неактивного клиента перед его закрытием
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,13 +20,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-
-const DB_PATH = path.join(__dirname, "wishlist.db");
-let db;
-
-(async () => {
-  db = await open({ filename: DB_PATH, driver: sqlite3.Database });
-})();
 
 // GET all gifts
 app.get("/api/gifts", async (req, res) => {
