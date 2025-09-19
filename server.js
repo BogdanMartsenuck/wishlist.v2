@@ -24,10 +24,10 @@ app.use(express.static(path.join(__dirname, "public")));
 // GET all gifts
 app.get("/api/gifts", async (req, res) => {
     try {
-      const gifts = await db.all(`
+      const gifts = await db.query(`
         SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist
       `);
-      res.json(gifts);
+      res.json(gifts.rows);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -37,7 +37,7 @@ app.get("/api/gifts", async (req, res) => {
 app.post("/api/gifts/:id/toggle", async (req, res) => {
   const id = req.params.id;
   try {
-    const gift = await db.get("SELECT * FROM wishlist WHERE id = ?", [id]);
+    const gift = await db.query("SELECT * FROM wishlist WHERE id = ?", [id]);
     if (!gift) return res.status(404).json({ error: "Gift not found" });
 
     const newStatus = gift.taken ? 0 : 1;
@@ -55,7 +55,7 @@ app.post("/api/gifts", async (req, res) => {
     if (!title) return res.status(400).json({ error: "Title is required" });
   
     try {
-      const result = await db.run(
+      const result = await db.query(
         "INSERT INTO wishlist (title, image_url, links, description) VALUES (?, ?, ?, ?)",
         [title, image_url || null, links ? JSON.stringify(links) : null, description || null]
       );
@@ -70,7 +70,7 @@ app.post("/api/gifts", async (req, res) => {
     const { description } = req.body;
   
     try {
-      await db.run(
+      await db.query(
         `UPDATE wishlist SET description = ? WHERE id = ?`,
         [description, id]
       );
@@ -85,7 +85,7 @@ app.post("/api/gifts", async (req, res) => {
     const { image_url } = req.body;
   
     try {
-      await db.run(
+      await db.query(
         `UPDATE wishlist SET image_url = ? WHERE id = ?`,
         [image_url, id]
       );
@@ -99,7 +99,7 @@ app.post("/api/gifts", async (req, res) => {
   app.delete("/api/gifts/:id", async (req, res) => {
     const id = req.params.id;
     try {
-      await db.run("DELETE FROM wishlist WHERE id = ?", [id]);
+      await db.query("DELETE FROM wishlist WHERE id = ?", [id]);
       res.json({ success: true });
     } catch (err) {
       res.status(500).json({ error: err.message });
