@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/gifts", async (req, res) => {
     try {
       const gifts = await db.query(`
-        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist
+        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist ORDER BY id
       `);
       res.json(gifts.rows);
     } catch (err) {
@@ -37,12 +37,12 @@ app.get("/api/gifts", async (req, res) => {
 app.post("/api/gifts/:id/toggle", async (req, res) => {
   const id = req.params.id;
   try {
-    const gifts = await db.query("SELECT * FROM wishlist WHERE id = ?", [id]);
+    const gifts = await db.query("SELECT * FROM wishlist WHERE id = $1", [id]);
     const gift = gifts.rows[0];
     if (!gift) return res.status(404).json({ error: "Gift not found" });
 
     const newStatus = gift.taken ? 0 : 1;
-    await db.run("UPDATE wishlist SET taken = ? WHERE id = ?", [newStatus, id]);
+    await db.run("UPDATE wishlist SET taken = $1 WHERE id = $2", [newStatus, id]);
     res.json({ success: true, is_taken: newStatus });
     console.log(`Gift ID ${id} taken status toggled to ${newStatus}`);
   } catch (err) {
@@ -57,7 +57,7 @@ app.post("/api/gifts", async (req, res) => {
   
     try {
       const result = await db.query(
-        "INSERT INTO wishlist (title, image_url, links, description) VALUES (?, ?, ?, ?)",
+        "INSERT INTO wishlist (title, image_url, links, description) VALUES ($1, $2, $3, $4)",
         [title, image_url || null, links ? JSON.stringify(links) : null, description || null]
       );
       res.json({ success: true, id: result.rows[0].id });
@@ -72,7 +72,7 @@ app.post("/api/gifts", async (req, res) => {
   
     try {
       await db.query(
-        `UPDATE wishlist SET description = ? WHERE id = ?`,
+        `UPDATE wishlist SET description = $1 WHERE id = $2`,
         [description, id]
       );
       res.json({ success: true });
@@ -87,7 +87,7 @@ app.post("/api/gifts", async (req, res) => {
   
     try {
       await db.query(
-        `UPDATE wishlist SET image_url = ? WHERE id = ?`,
+        `UPDATE wishlist SET image_url = $1 WHERE id = $2`,
         [image_url, id]
       );
       res.json({ success: true });
@@ -100,7 +100,7 @@ app.post("/api/gifts", async (req, res) => {
   app.delete("/api/gifts/:id", async (req, res) => {
     const id = req.params.id;
     try {
-      await db.query("DELETE FROM wishlist WHERE id = ?", [id]);
+      await db.query("DELETE FROM wishlist WHERE id = $1", [id]);
       res.json({ success: true });
     } catch (err) {
       res.status(500).json({ error: err.message });
