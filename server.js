@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/gifts", async (req, res) => {
     try {
       const gifts = await db.query(`
-        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist ORDER BY id
+        SELECT id, title AS name, image_url, links, taken AS is_taken, description FROM wishlist
       `);
       res.json(gifts.rows);
     } catch (err) {
@@ -37,7 +37,8 @@ app.get("/api/gifts", async (req, res) => {
 app.post("/api/gifts/:id/toggle", async (req, res) => {
   const id = req.params.id;
   try {
-    const gift = await db.query("SELECT * FROM wishlist WHERE id = ?", [id]);
+    const gifts = await db.query("SELECT * FROM wishlist WHERE id = ?", [id]);
+    const gift = gifts.rows[0];
     if (!gift) return res.status(404).json({ error: "Gift not found" });
 
     const newStatus = gift.taken ? 0 : 1;
@@ -59,7 +60,7 @@ app.post("/api/gifts", async (req, res) => {
         "INSERT INTO wishlist (title, image_url, links, description) VALUES (?, ?, ?, ?)",
         [title, image_url || null, links ? JSON.stringify(links) : null, description || null]
       );
-      res.json({ success: true, id: result.lastID });
+      res.json({ success: true, id: result.rows[0].id });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
